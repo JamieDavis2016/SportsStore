@@ -30,7 +30,7 @@ namespace SportsStore.Tests
             controller.PageSize = 3;
 
             //Act
-            var result = controller.List(2).ViewData.Model as ProductListViewModel;
+            var result = controller.List(null, 2).ViewData.Model as ProductListViewModel;
 
             //Assert
             Product[] prodArray = result.Products.ToArray();
@@ -55,7 +55,7 @@ namespace SportsStore.Tests
             var controller = new ProductController(mock.Object) { PageSize = 3 };
 
             //Act
-            var result = controller.List(2).ViewData.Model as ProductListViewModel;
+            var result = controller.List(null, 2).ViewData.Model as ProductListViewModel;
 
             //Assert
             var pageInfo = result.PagingInfo;
@@ -63,6 +63,30 @@ namespace SportsStore.Tests
             Assert.Equal(3, pageInfo.ItemsPerPage);
             Assert.Equal(5, pageInfo.TotalItems);
             Assert.Equal(2, pageInfo.TotalPages);
+        }
+
+        [Fact]
+        public void Can_Filter_Products()
+        {
+            //Arrange
+            var mock = new Mock<IProductRepository>();
+            mock.Setup(x => x.Products).Returns((new Product[] {
+                new Product {ProductID = 1, Name = "P1", Category = "Cat1"},
+                new Product {ProductID = 2, Name = "P2", Category = "Cat2"},
+                new Product {ProductID = 3, Name = "P3", Category = "Cat1"},
+                new Product {ProductID = 4, Name = "P4", Category = "Cat2"},
+                new Product {ProductID = 5, Name = "P5", Category = "Cat3"}
+            }).AsQueryable<Product>());
+
+            var controller = new ProductController(mock.Object) { PageSize = 3 };
+
+            //Act
+            var result = (controller.List("Cat2", 2).ViewData.Model as ProductListViewModel).Products.ToArray();
+
+            //Assert
+            Assert.Equal(2, result.Length);
+            Assert.True(result[0].Name == "P2" && result[0].Category == "Cat2");
+            Assert.True(result[1].Name == "P4" && result[1].Category == "Cat2");
         }
     }
 }
