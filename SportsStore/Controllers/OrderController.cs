@@ -19,7 +19,7 @@ namespace SportsStore.Controllers
         [HttpPost]
         public IActionResult Checkout(Order order)
         {
-            if (Cart.Lines.Count() > 0)
+            if (Cart.Lines.Count() < 0)
             {
                 ModelState.AddModelError("", "Sorry, your cart is empty");
             }
@@ -37,6 +37,21 @@ namespace SportsStore.Controllers
         {
             Cart.Clear();
             return View();
+        }
+
+        public ViewResult List() => View(OrderRepository.Orders.Where(x => !x.Shipped));
+
+        [HttpPost]
+        public IActionResult MarkShipped(int OrderId)
+        {
+            var order = OrderRepository.Orders.FirstOrDefault(x => x.OrderID == OrderId);
+            if (order != null)
+            {
+                order.Shipped = true;
+                OrderRepository.SaveOrder(order);
+            }
+
+            return RedirectToAction(nameof(List));
         }
     }
 }
