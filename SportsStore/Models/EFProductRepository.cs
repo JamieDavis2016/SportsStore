@@ -25,7 +25,8 @@ namespace SportsStore.Models
             else
             {
                 var dbEntry = context.Products.FirstOrDefault(x => x.ProductID == product.ProductID);
-                if(dbEntry != null) {
+                if (dbEntry != null)
+                {
                     dbEntry.Name = product.Name;
                     dbEntry.Price = product.Price;
                     dbEntry.Category = product.Category;
@@ -33,6 +34,17 @@ namespace SportsStore.Models
                 }
             }
             context.SaveChanges();
+        }
+
+        public Product DeleteProduct(int productID)
+        {
+            var dbEntry = context.Products.FirstOrDefault(x => x.ProductID == productID);
+            if (dbEntry != null)
+            {
+                context.Products.Remove(dbEntry);
+                context.SaveChanges();
+            }
+            return dbEntry;
         }
     }
 }

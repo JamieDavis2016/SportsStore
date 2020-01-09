@@ -77,7 +77,7 @@ namespace SportsStore.Tests
             var result = GetViewModel<Product>(target.Edit(4));
 
             //Assert
-            Assert.Null(result); 
+            Assert.Null(result);
         }
 
         [Fact]
@@ -123,6 +123,28 @@ namespace SportsStore.Tests
             //Assert
             mock.Verify(x => x.SaveProduct(It.IsAny<Product>()), Times.Once);
             Assert.IsType<ViewResult>(result);
+        }
+
+        [Fact]
+        public void Can_Delete_Valid_Products()
+        {
+            //Arrange
+            var prod = new Product { ProductID = 2, Name = "Test" };
+            var mock = new Mock<IProductRepository>();
+            mock.Setup(x => x.Products).Returns((new Product[]
+            {
+                new Product {  ProductID = 1, Name = "P1" },
+                prod,
+                new Product {  ProductID = 3, Name = "P3" }
+            }).AsQueryable<Product>());
+
+            var target = new AdminController(mock.Object);
+
+            //Act
+            var result = target.Delete(prod.ProductID);
+
+            //Assert
+            mock.Verify(x => x.DeleteProduct(prod.ProductID));
         }
 
         private T GetViewModel<T>(IActionResult result) where T : class
