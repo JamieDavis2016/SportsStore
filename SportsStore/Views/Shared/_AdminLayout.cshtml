@@ -3,28 +3,27 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>SportsStore</title>
+    <title>@ViewBag.Title</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
     </environment>
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+        <script src="~/lib/jQuery/jquery.min.js"></script>
+        <script src="~/lib/jQuery/jquery.validate.min.js"></script>
+        <script src="~/lib/jQuery/jquery.validate.unobtrusive.js"></script>
     </environment>
+    <style>
+        .input-validation-error { border-color: red; background-color: #fee;}
+    </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse bg-inverse" role="navigation">
-        <div class="row">
-            <a class="col navbar-brand" href="#">Sports Clone</a>
-            <div class="col-4 text-right">
-                @await Component.InvokeAsync("CartSummary")
-            </div>
-        </div>
-    </div>
-    <div class="row m-1 p-1">
-        <div id="categories" class="col-3">
+    <div class="m-1 p-1">
             <div class="bg-info p-2"><h4>@ViewBag.Title</h4></div>
+        @if(TempData["message"] != null)
+        {
+            <div class="alert alert-success">@TempData["message"]</div>
+        }
             @RenderBody()
         </div>
-    </div>
 </body>
 </html>
