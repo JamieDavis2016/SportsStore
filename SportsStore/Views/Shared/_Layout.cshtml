@@ -6,6 +6,9 @@
     <title>SportsStore</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap-grid.min.css" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap-reboot.min.css" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
     </environment>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
@@ -20,13 +23,15 @@
             </div>
         </div>
     </div>
+
     <div class="row m-1 p-1">
         <div id="categories" class="col-3">
             @await Component.InvokeAsync("NavigationMenu")
         </div>
-    </div>
-    <div class="col-9">
-        @RenderBody()
+
+        <div class="col-9">
+            @RenderBody()
+        </div>
     </div>
 </body>
 </html>
